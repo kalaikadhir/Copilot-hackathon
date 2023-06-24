@@ -22,7 +22,7 @@ app.post("/register",async(req,res)=>{
     try{
         const hashedPassword = await bcrypt.hash(req.body.password,10)
         const user = {userName: req.body.userName , password: hashedPassword}
-        const newUser = new UserModel({userName: user.userName, password: user.password})
+        const newUser = new UserModel({name: user.userName, password: user.password})
         await newUser.save()
         res.status(201).send()
     } catch{
@@ -58,7 +58,7 @@ app.post("/login",async(req,res)=>{
     
     try{
         console.log("Tried.")
-        const user=await User.findOne({userName: req.body.userName})
+        const user=await User.findOne({name: req.body.userName})
         console.log("User....")
         if(!user){
             console.log("No such user exists")
