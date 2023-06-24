@@ -7,7 +7,7 @@ const cors = require('cors');
 app.use(express.json());
 app.use(cors());
 
-mongooose.connect("mongodb+srv://admin:Ketanrocks14@tasks.wiuemon.mongodb.net/work?retryWrites=true&w=majority",{useNewUrlParser:true});
+mongooose.connect("mongodb+srv://ketansingh918:ketansingh@cluster0.yiaqxkq.mongodb.net/?retryWrites=true&w=majority",{useNewUrlParser:true});
 
 app.listen(8000,()=>{
     console.log("listening")
