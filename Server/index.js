@@ -58,7 +58,7 @@ app.post("/login",async(req,res)=>{
     
     try{
         console.log("Tried.")
-        const user=await User.findOne({name: req.body.userName})
+        const user=await UserModel.findOne({name: req.body.userName})
         console.log("User....")
         if(!user){
             console.log("No such user exists")
