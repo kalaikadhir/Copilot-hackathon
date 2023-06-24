@@ -1,8 +1,10 @@
 const express = require('express');
 const app = express();
 const mongooose = require('mongoose');
-const WorkModel = require('./models/Work');
+const bcrypt = require('bcrypt');
 const cors = require('cors');
+const UserModel = require('./models/User');
+const TransactionModel = require('./models/Transaction');
 
 app.use(express.json());
 app.use(cors());
@@ -14,47 +16,13 @@ app.listen(8000,()=>{
 });
 
 
-app.post("/insert",async (req, res) =>{
-    const title = req.body.title;
-    const body = req.body.body;
-    const eod = req.body.eod;
-    const task = new WorkModel({title, body, eod});
-    try
-    {
-        await task.save();
-        res.send("Inserted Data");
-    }
-    catch(err)
-    {
-        console.log(err);
-        res.send("error");
-    }
-});
-
-app.get("/read",async (req, res) =>{
-    WorkModel.find({},(err,result)=>{
-        if(err)
-        {
-            res.send(err);
-        }
-
-        res.send(result);
-    });
-});
-
-app.delete("/delete/:id",async (req, res) =>{
-   const id = req.params.id;
-   await WorkModel.findByIdAndRemove(id).exec();
-   res.send("deleted");
-});
-
 // Registration
 
 app.post("/register",async(req,res)=>{
     try{
         const hashedPassword = await bcrypt.hash(req.body.password,10)
         const user = {userName: req.body.userName , password: hashedPassword}
-        const newUser = new studentModel({userName: user.userName, password: user.password})
+        const newUser = new UserModel({userName: user.userName, password: user.password})
         await newUser.save()
         res.status(201).send()
     } catch{
@@ -80,11 +48,6 @@ function authenticateUser(req, res, next) {
         return res.sendStatus(403)
       }
       req.user = user
-      console.log(user)
-      if(user.isUser==false){
-          console.log("User is not a student")
-          return res.sendStatus(403)
-      }
       next()
     })
   }
@@ -95,7 +58,7 @@ app.post("/login",async(req,res)=>{
     
     try{
         console.log("Tried.")
-        const user=await studentModel.findOne({userName: req.body.userName})
+        const user=await User.findOne({userName: req.body.userName})
         console.log("User....")
         if(!user){
             console.log("No such user exists")
@@ -106,7 +69,7 @@ app.post("/login",async(req,res)=>{
         if(match){
             // console.log("matched")
             // console.log(user,process.env.ACCESS_TOKEN_SECRET)
-            const token=jwt.sign({id: user._id, isUser: true},process.env.ACCESS_TOKEN_SECRET)
+            const token=jwt.sign({id: user._id},process.env.ACCESS_TOKEN_SECRET)
             res.json({user:user,token:token})
         }
         else{
@@ -116,4 +79,19 @@ app.post("/login",async(req,res)=>{
     } catch{
         res.status(500).send()
     }    
+})
+
+app.get(authenticateUser,"/",async(req,res)=>{
+    const user_id = req.user;
+    const user = await UserModel.findById(user_id);
+    if(!user){
+        res.status(400).send("No such user exists");
+    }
+    let Transaction = user.transactions;
+    let temp = [];
+    for(let i=0;i<Transaction.length;i++){
+        let tempTransaction = await TransactionModel.findById(Transaction[i]);
+        temp.push(tempTransaction);
+    }
+    res.send({user:user,transactions:temp});
 })

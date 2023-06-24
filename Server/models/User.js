@@ -1,7 +1,7 @@
-const mongooose = require('mongoose');
+const mongoose = require('mongoose');
 const transactions = require('./Transaction');
 
-const UserSchema = mongooose.Schema({
+const UserSchema = mongoose.Schema({
     name : {
         type:'string',
         required:true
@@ -22,6 +22,6 @@ const UserSchema = mongooose.Schema({
     }]
 })
 
-const User = mongooose.model("User",UserSchema)
+const UserModel = mongoose.model("User",UserSchema)
 
-module.exports= User;
+module.exports= UserModel;

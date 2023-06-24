@@ -1,8 +1,8 @@
-const mongooose = require('mongoose');
+const mongoose = require('mongoose');
 const User = require('./User');
 
 
-const UserSchema = mongooose.Schema({
+const TransactionSchema = mongoose.Schema({
     amount : {
         type:'number',
         required:true
@@ -19,6 +19,6 @@ const UserSchema = mongooose.Schema({
     }
 })
 
-const User = mongooose.model("User",UserSchema)
+const TransactionModel = mongoose.model("Transactiom",TransactionSchema)
 
-module.exports= User;
+module.exports= TransactionModel;
