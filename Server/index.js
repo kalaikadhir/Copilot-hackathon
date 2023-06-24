@@ -89,9 +89,86 @@ app.get("/",authenticateUser,async(req,res)=>{
     }
     let Transaction = user.transactions;
     let temp = [];
+    if(Transaction){
     for(let i=0;i<Transaction.length;i++){
         let tempTransaction = await TransactionModel.findById(Transaction[i]);
         temp.push(tempTransaction);
-    }
+    }}
     res.send({user:user,transactions:temp});
 })
+
+app.post("/transaction",authenticateUser,async(req,res)=>{
+    const user_id = req.user;
+    const user = await UserModel.findById(user_id);
+    if(!user){
+        res.status(400).send("No such user exists");
+    }
+    const transaction = new TransactionModel({amount:req.body.amount,type:req.body.type,category:req.body.category ,user_id:user_id});
+    if(!transaction){
+        res.status(400).send("Transaction not created");
+    }
+    await transaction.save();
+    user.transactions.push(transaction);
+    if(transaction.type=="credit"){
+        user.current_balance+=transaction.amount;
+    }
+    else{
+        user.current_balance-=transaction.amount;
+    }
+    await user.save();
+    res.send({user:user,transaction:transaction});
+})
+
+app.delete("/transaction/:id",authenticateUser,async(req,res)=>{
+    const user_id = req.user;
+    const user = await UserModel.findById(user_id);
+    if(!user){
+        res.status(400).send("No such user exists");
+    }
+    const transaction = await TransactionModel.findById(req.params.id);
+    if(!transaction){
+        res.status(400).send("No such transaction exists");
+    }
+    if(transaction.user_id!=user_id){
+        res.status(400).send("Different user");
+    }
+    
+    if(transaction.type=="credit"){
+        user.current_balance-=transaction.amount;
+    }
+    else{
+        user.current_balance+=transaction.amount;
+    }
+    await user.save();
+    await transaction.remove();
+    res.send({user:user,transaction:transaction});
+})
+
+app.put("/transaction/:id",authenticateUser,async(req,res)=>{
+    const user_id = req.user;
+    const user = await UserModel.findById(user_id);
+    if(!user){
+        res.status(400).send("No such user exists");
+    }
+    const transaction = await TransactionModel.findById(req.params.id);
+    if(!transaction){
+        res.status(400).send("No such transaction exists");
+    }
+    if(transaction.user_id!=user_id){
+        res.status(400).send("Different user");
+    }
+    let amount = req.body.amount;
+    if(transaction.type=="credit"){
+        user.current_balance-=transaction.amount;
+        user.current_balance+=amount;
+    }
+    else{
+        user.current_balance+=transaction.amount;
+        user.current_balance-=amount;
+    }
+    transaction.amount=req.body.amount;
+    await transaction.save();
+    await user.save();
+    res.send({user:user,transaction:transaction});
+})
+
