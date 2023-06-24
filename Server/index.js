@@ -81,7 +81,7 @@ app.post("/login",async(req,res)=>{
     }    
 })
 
-app.get(authenticateUser,"/",async(req,res)=>{
+app.get("/",authenticateUser,async(req,res)=>{
     const user_id = req.user;
     const user = await UserModel.findById(user_id);
     if(!user){
