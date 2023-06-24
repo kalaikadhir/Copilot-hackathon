@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+
+* {
+  margin: 0;
+  font-family: "Quicksand";
+  color: #333;
+}
+
+.nav 
+{
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.nav h1
+{
+  color: #f1356d;
+}
+
+.nav a
+{
+  margin-left: 16px;
+  text-decoration: none;
+  padding: 6px;
+}
+
+.work-preview 
+{
+  padding: 10px 16px;
+  margin: 20px 0;
+  border-bottom: 1px solid #fafafa;
+}
+
+.work-preview:hover 
+{
+  box-shadow: 1px 3px 5px rgba(0,0,0,0.1);
+}
+
+.work-preview h1 
+{
+  display: flex;
+  margin-left: auto;
+  color: #f1356d;
+  margin-bottom: 8px;
+  margin-left: 3%;
+}
+
+.work-preview p
+{
+  display: flex;
+  margin-left: 3%;
+  margin-bottom: auto;
+  font-size: 20px;
+  padding: auto;
+}
+
+.work-preview .foot
+{
+  display: flex;
+  margin-left: 5%;
+  padding: 2%;
+}
+
+.work-preview button
+{
+  margin-left: auto;
+  margin-left: auto;
+  background: #f1356d;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+
+.create {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+.create label {
+  text-align: left;
+  display: block;
+}
+.create h2 {
+  font-size: 20px;
+  color: #f1356d;
+  margin-bottom: 30px;
+}
+.create input, .create textarea, .create select {
+  width: 100%;
+  padding: 6px 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  display: block;
+}
+.create button {
+  background: #f1356d;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
