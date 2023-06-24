@@ -5,6 +5,9 @@ const bcrypt = require('bcrypt');
 const cors = require('cors');
 const UserModel = require('./models/User');
 const TransactionModel = require('./models/Transaction');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
 
 app.use(express.json());
 app.use(cors());
